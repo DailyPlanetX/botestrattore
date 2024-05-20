@@ -10,4 +10,11 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag unzip-bot:$(date +%s)
+      run: |
+        docker build . --file Dockerfile --tag unzip-bot:$(date +%s)
+        docker save unzip-bot:$(date +%s) | gzip > unzip-bot.tar.gz
+    - name: Upload Docker image
+      uses: actions/upload-artifact@v2
+      with:
+        name: unzip-bot
+        path: unzip-bot.tar.gz
